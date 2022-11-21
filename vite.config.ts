@@ -20,11 +20,14 @@ export default defineConfig({
   },
   plugins: [
     Vue({
+      include: [/\.vue$/, /\.md$/],
       reactivityTransform: true,
     }),
 
     // https://github.com/hannoeru/vite-plugin-pages
-    Pages(),
+    Pages({
+      extensions: ['vue', 'md'],
+    }),
 
     vueI18n({
       runtimeOnly: true,
@@ -38,9 +41,11 @@ export default defineConfig({
         'vue',
         'vue/macros',
         'vue-router',
+        'vue-i18n',
         '@vueuse/core',
+        '@vueuse/head',
       ],
-      dts: true,
+      dts: 'src/auto-imports.d.ts',
       dirs: [
         './src/composables',
       ],
