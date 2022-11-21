@@ -1,3 +1,4 @@
+import type { App } from 'vue'
 import { createI18n } from 'vue-i18n'
 
 // Import i18n resources
@@ -13,7 +14,7 @@ const messages = Object.fromEntries(
     }),
 )
 
-export const install = ({ app }) => {
+export const install = (app: App<Element>) => {
   const i18n = createI18n({
     legacy: false,
     locale: 'en',
