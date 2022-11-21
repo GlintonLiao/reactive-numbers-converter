@@ -11,7 +11,7 @@ header:
   battle: Battle
 intro:
   aka: Also known as
-  desc: Ai Battle Platform
+  desc: Reactive Numbers Converter
   dynamic-route: Demo of dynamic route
   hi: Hi, {name}!
   whats-your-name: What's your name?
