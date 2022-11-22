@@ -4,13 +4,10 @@ import type { IResult } from '~/types'
 const { t } = useI18n()
 const decimalValue = ref(0)
 const isShow = ref(false)
+const signed = ref(true)
 
 const hexadecimalVal = computed(() => {
   return decimalValue.value.toString(16)
-})
-
-const binaryVal = computed(() => {
-  return decimalValue.value.toString(2)
 })
 
 // self-defined base
@@ -27,20 +24,37 @@ const updateDecimal = (e: any, base: number) => {
   const res = e.target.value
   if (res.length === 0) return
   const num = parseInt(res, base)
-  if (!isNaN(num))
-    decimalValue.value = num
+  if (isNaN(num) || (!signed.value && num < 0)) return
+  decimalValue.value = num
 }
 
-const signed = ref(false)
+const toFixed = (d = '', length = 8, symbol = 0) => {
+  if (d.length < length)
+    return symbol + '0'.repeat(length - 1 - d.length) + d
+  return d
+}
+
+const binaryVal = computed(() => {
+  const two = Math.abs(decimalValue.value).toString(2)
+  if (decimalValue.value >= 0)
+    return toFixed(two, 8, 0)
+  else
+    return toFixed(two, 8, 1)
+})
+
 const onesComplement = computed(() => {
   if (decimalValue.value >= 0) {
-    return decimalValue.value.toString(2)
-  }
-  else {
+    return binaryVal.value
+  } else {
     if (signed) {
-      return decimalValue.value.toString(2)
-    }
-    else {
+      let data = ''
+      for (let index = 0; index < 8; index++) {
+        const item = binaryVal.value[index]
+        if (index === 0) data += item
+        else data += Math.abs(+item - 1)
+      }
+      return data
+    } else {
       const num = ~decimalValue.value
       return num.toString(2)
     }
@@ -48,11 +62,16 @@ const onesComplement = computed(() => {
 })
 
 const twosComplement = computed(() => {
-  const reg = /1|0/g
-  const twoC = binaryVal.value.replace(reg, x => x === '0' ? '1' : '0')
-  const num = Number(twoC.slice(1)) + 1 // 加一
-  const res = `1${num.toString(2)}` // 添加符号位
-  return res
+  if (decimalValue.value >= 0)
+    return binaryVal.value
+  const valid = onesComplement.value.slice(1)
+  const validTenComplete = parseInt(valid, 2) + 1
+  const validTwoComplete = toFixed(
+    validTenComplete.toString(2),
+    8,
+    1,
+  )
+  return validTwoComplete
 })
 
 const onesToDecimal = (e: any) => {
@@ -115,7 +134,7 @@ const handleDrawer = () => {
           <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Decimal</label>
           <input
             id="input"
-            v-model.number="decimalValue"
+            :value="decimalValue"
             placeholder="Enter a number"
             type="text"
             autocomplete="false"
@@ -125,6 +144,7 @@ const handleDrawer = () => {
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"
             outline="none active:none"
+            @input="e => updateDecimal(e, 10)"
           >
         </div>
         <div text-left>
@@ -212,7 +232,7 @@ const handleDrawer = () => {
           <div flex justify-between>
             <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white flex-grow-2">Two's complement</label>
             <label for="AcceptConditions" class="relative h-5 w-10 cursor-pointer">
-              <input id="AcceptConditions" type="checkbox" class="peer sr-only">
+              <input id="AcceptConditions" v-model="signed" type="checkbox" class="peer sr-only">
               <span class="absolute inset-0 rounded-full bg-gray-300 transition peer-checked:bg-blue-500" />
               <span class="absolute inset-0 m-1 h-3 w-3 rounded-full bg-white transition peer-checked:translate-x-5" />
             </label>
