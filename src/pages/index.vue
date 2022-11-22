@@ -22,9 +22,17 @@ const updateBase = (e: any) => {
 
 const updateDecimal = (e: any, base: number) => {
   const res = e.target.value
-  if (res.length === 0) return
+  if (res.length === 0) {
+    e.target.classList.remove('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+    return
+  }
   const num = parseInt(res, base)
-  if (isNaN(num) || (!signed.value && num < 0)) return
+  if (isNaN(num) || (!signed.value && num < 0)) {
+    e.target.classList.add('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+    return
+  } else {
+    e.target.classList.remove('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+  }
   decimalValue.value = num
 }
 
@@ -74,11 +82,23 @@ const twosComplement = computed(() => {
   return validTwoComplete
 })
 
+const toggleError = (e: any, flag: boolean) => {
+  if (flag) e.target.classList.add('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+  else e.target.classList.remove('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+}
+
 const onesToDecimal = (e: any) => {
+  if (e.target.value.length === 0) {
+    toggleError(e, false)
+    return
+  }
   const res = parseInt(e.target.value)
+  if (isNaN(res)) {
+    toggleError(e, true)
+    return
+  } else { toggleError(e, false) }
   const origin = ~res
-  if (!isNaN(res))
-    decimalValue.value = origin
+  decimalValue.value = origin
 }
 
 const twosToDecimal = (e: any) => {
@@ -90,6 +110,7 @@ const twosToDecimal = (e: any) => {
 
 const results = reactive<IResult[]>([])
 
+const success = ref(false)
 const save = () => {
   results.push({
     decimalValue: decimalValue.value,
@@ -100,6 +121,10 @@ const save = () => {
     twosComplement: twosComplement.value,
     base: base.value,
   })
+  success.value = true
+  setTimeout(() => {
+    success.value = false
+  }, 1200)
 }
 
 const clear = () => {
@@ -112,6 +137,9 @@ const handleDrawer = () => {
 </script>
 
 <template>
+  <Transition name="pop">
+    <Success v-show="success" class="fixed mx-auto left-0 right-0 w-100 z-10 top-80" />
+  </Transition>
   <Transition name="fade">
     <Drawer v-show="isShow" :close-drawer="handleDrawer" :results="results" />
   </Transition>
@@ -133,7 +161,7 @@ const handleDrawer = () => {
         <div text-left>
           <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Decimal</label>
           <input
-            id="input"
+            id="inputd"
             :value="decimalValue"
             placeholder="Enter a number"
             type="text"
@@ -201,6 +229,7 @@ const handleDrawer = () => {
             id="input"
             :value="binaryVal"
             type="text"
+            placeholder="Enter a number"
             autocomplete="false"
             p="x-4 y-2"
             w="300px"
@@ -241,6 +270,7 @@ const handleDrawer = () => {
           <input
             id="input"
             :value="twosComplement"
+            placeholder="Enter a number"
             type="text"
             autocomplete="false"
             p="x-4 y-2"
@@ -286,5 +316,15 @@ const handleDrawer = () => {
 .fade-enter-from,
 .fade-leave-to {
   left: -40%;
+}
+
+.pop-enter-active,
+.pop-leave-active {
+  opacity: 1;
+  transition: all 0.5s ease;
+}
+.pop-enter-from,
+.pop-leave-to {
+  opacity: 0;
 }
 </style>

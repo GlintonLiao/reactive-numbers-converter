@@ -13,5 +13,6 @@ declare module '@vue/runtime-core' {
     Result: typeof import('./src/components/Result.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Success: typeof import('./src/components/Success.vue')['default']
   }
 }
