@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { IResult } from '~/types'
+
+const { t } = useI18n()
 const decimalValue = ref(0)
 const isShow = ref(false)
-const { t } = useI18n()
 
 const hexadecimalVal = computed(() => {
   return decimalValue.value.toString(16)
@@ -22,19 +24,35 @@ const updateBase = (e: any) => {
 }
 
 const updateDecimal = (e: any, base: number) => {
-  const res = parseInt(e.target.value, base)
-  if (!isNaN(res))
-    decimalValue.value = res
+  const res = e.target.value
+  if (res.length === 0) return
+  const num = parseInt(res, base)
+  if (!isNaN(num))
+    decimalValue.value = num
 }
 
+const signed = ref(false)
 const onesComplement = computed(() => {
-  const num = ~decimalValue.value
-  return num.toString(2)
+  if (decimalValue.value >= 0) {
+    return decimalValue.value.toString(2)
+  }
+  else {
+    if (signed) {
+      return decimalValue.value.toString(2)
+    }
+    else {
+      const num = ~decimalValue.value
+      return num.toString(2)
+    }
+  }
 })
 
 const twosComplement = computed(() => {
-  const num = ~decimalValue.value + 1
-  return num.toString(2)
+  const reg = /1|0/g
+  const twoC = binaryVal.value.replace(reg, x => x === '0' ? '1' : '0')
+  const num = Number(twoC.slice(1)) + 1 // 加一
+  const res = `1${num.toString(2)}` // 添加符号位
+  return res
 })
 
 const onesToDecimal = (e: any) => {
@@ -51,8 +69,22 @@ const twosToDecimal = (e: any) => {
     decimalValue.value = origin
 }
 
-const save = () => {
+const results = reactive<IResult[]>([])
 
+const save = () => {
+  results.push({
+    decimalValue: decimalValue.value,
+    hexadecimalVal: hexadecimalVal.value,
+    extraVal: extraVal.value,
+    binaryVal: binaryVal.value,
+    onesComplement: onesComplement.value,
+    twosComplement: twosComplement.value,
+    base: base.value,
+  })
+}
+
+const clear = () => {
+  decimalValue.value = 0
 }
 
 const handleDrawer = () => {
@@ -62,7 +94,7 @@ const handleDrawer = () => {
 
 <template>
   <Transition name="fade">
-    <Drawer v-show="isShow" :close-drawer="handleDrawer" />
+    <Drawer v-show="isShow" :close-drawer="handleDrawer" :results="results" />
   </Transition>
   <div>
     <div i-carbon-data-reference text-4xl inline-block />
@@ -72,7 +104,7 @@ const handleDrawer = () => {
       </a>
     </p>
     <p>
-      <em text-sm op75>All in one without clicking</em>
+      <em text-sm op75>All in one</em>
     </p>
 
     <div py-3 />
@@ -115,8 +147,9 @@ const handleDrawer = () => {
         <div text-left>
           <div flex justify-between items-start>
             <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Self-defined</label>
-            <select id="base" class="bg-gray-50 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-15 h-5 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            @change="updateBase"
+            <select
+              id="base" class="bg-gray-50 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-15 h-5 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              @change="updateBase"
             >
               <option value="8" selected>
                 8
@@ -137,6 +170,7 @@ const handleDrawer = () => {
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"
             outline="none active:none"
+            @input="e => updateDecimal(e, base)"
           >
         </div>
       </div>
@@ -213,6 +247,12 @@ const handleDrawer = () => {
         @click="handleDrawer"
       >
         View History
+      </button>
+      <button
+        class="m-3 text-sm btn bg-orange7 hover:bg-orange8"
+        @click="clear"
+      >
+        Clear
       </button>
     </div>
   </div>

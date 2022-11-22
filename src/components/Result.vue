@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import type { IResult } from '~/types'
+const props = defineProps<{
+  item: IResult
+}>()
+
+const {
+  decimalValue,
+  hexadecimalVal,
+  extraVal,
+  binaryVal,
+  onesComplement,
+  twosComplement,
+  base,
+} = props.item
+</script>
+
 <template>
   <div class="flex items-center space-x-4 justify-between mb-5">
     <div class="min-w-0">
@@ -6,7 +23,7 @@
       </p>
     </div>
     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-      110010
+      {{ decimalValue }}
     </div>
   </div>
   <div class="flex items-center space-x-4 justify-between mb-5">
@@ -16,17 +33,17 @@
       </p>
     </div>
     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-      1E657
+      {{ hexadecimalVal }}
     </div>
   </div>
   <div class="flex items-center space-x-4 justify-between mb-5">
     <div class="min-w-0">
       <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-        Hexadecimal
+        Base-{{ base }}
       </p>
     </div>
     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-      1E657
+      {{ extraVal }}
     </div>
   </div>
   <div class="flex items-center space-x-4 justify-between mb-5">
@@ -36,7 +53,7 @@
       </p>
     </div>
     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-      00101011001
+      {{ binaryVal }}
     </div>
   </div>
   <div class="flex items-center space-x-4 justify-between mb-5">
@@ -46,7 +63,7 @@
       </p>
     </div>
     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-      10010101000101
+      {{ onesComplement }}
     </div>
   </div>
   <div class="flex items-center space-x-4 justify-between">
@@ -56,7 +73,7 @@
       </p>
     </div>
     <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-      110001010101
+      {{ twosComplement }}
     </div>
   </div>
 </template>
