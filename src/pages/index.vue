@@ -1,17 +1,71 @@
 <script setup lang="ts">
-const name = $ref('')
-
-const router = useRouter()
-const go = () => {
-  if (name)
-    router.push(`/hi/${encodeURIComponent(name)}`)
-}
+const decimalValue = ref(0)
+const isShow = ref(false)
 const { t } = useI18n()
+
+const hexadecimalVal = computed(() => {
+  return decimalValue.value.toString(16)
+})
+
+const binaryVal = computed(() => {
+  return decimalValue.value.toString(2)
+})
+
+// self-defined base
+const base = ref(8)
+const extraVal = computed(() => {
+  return decimalValue.value.toString(base.value)
+})
+
+const updateBase = (e: any) => {
+  base.value = parseInt(e.target.value)
+}
+
+const updateDecimal = (e: any, base: number) => {
+  const res = parseInt(e.target.value, base)
+  if (!isNaN(res))
+    decimalValue.value = res
+}
+
+const onesComplement = computed(() => {
+  const num = ~decimalValue.value
+  return num.toString(2)
+})
+
+const twosComplement = computed(() => {
+  const num = ~decimalValue.value + 1
+  return num.toString(2)
+})
+
+const onesToDecimal = (e: any) => {
+  const res = parseInt(e.target.value)
+  const origin = ~res
+  if (!isNaN(res))
+    decimalValue.value = origin
+}
+
+const twosToDecimal = (e: any) => {
+  const res = parseInt(e.target.value)
+  const origin = ~res + 1
+  if (!isNaN(res))
+    decimalValue.value = origin
+}
+
+const save = () => {
+
+}
+
+const handleDrawer = () => {
+  isShow.value = !isShow.value
+}
 </script>
 
 <template>
+  <Transition name="fade">
+    <Drawer v-show="isShow" :close-drawer="handleDrawer" />
+  </Transition>
   <div>
-    <div i-carbon-campsite text-4xl inline-block />
+    <div i-carbon-data-reference text-4xl inline-block />
     <p>
       <a rel="noreferrer" href="https://github.com/antfu/vitesse-lite" target="_blank">
         {{ t('intro.desc') }}
@@ -29,23 +83,7 @@ const { t } = useI18n()
           <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Decimal</label>
           <input
             id="input"
-            v-model="name"
-            placeholder="Enter a number"
-            type="text"
-            autocomplete="false"
-            p="x-4 y-2"
-            w="300px"
-            text="center"
-            bg="gray-50 dark:gray-700"
-            border="~ rounded gray-200 dark:gray-700"
-            outline="none active:none"
-          >
-        </div>
-        <div text-left>
-          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Octal</label>
-          <input
-            id="input"
-            v-model="name"
+            v-model.number="decimalValue"
             placeholder="Enter a number"
             type="text"
             autocomplete="false"
@@ -61,8 +99,36 @@ const { t } = useI18n()
           <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hexadecimal</label>
           <input
             id="input"
-            v-model="name"
+            :value="hexadecimalVal"
             placeholder="Enter a number"
+            type="text"
+            autocomplete="false"
+            p="x-4 y-2"
+            w="300px"
+            text="center"
+            bg="gray-50 dark:gray-700"
+            border="~ rounded gray-200 dark:gray-700"
+            outline="none active:none"
+            @input="e => updateDecimal(e, 16)"
+          >
+        </div>
+        <div text-left>
+          <div flex justify-between items-start>
+            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Self-defined</label>
+            <select id="base" class="bg-gray-50 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-15 h-5 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            @change="updateBase"
+            >
+              <option value="8" selected>
+                8
+              </option>
+              <option v-for="i in 29" :key="i" :value="i + 1">
+                {{ i + 1 }}
+              </option>
+            </select>
+          </div>
+          <input
+            id="input"
+            :value="extraVal"
             type="text"
             autocomplete="false"
             p="x-4 y-2"
@@ -79,8 +145,7 @@ const { t } = useI18n()
           <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Binary</label>
           <input
             id="input"
-            v-model="name"
-            placeholder="Enter a number"
+            :value="binaryVal"
             type="text"
             autocomplete="false"
             p="x-4 y-2"
@@ -89,13 +154,14 @@ const { t } = useI18n()
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"
             outline="none active:none"
+            @input="e => updateDecimal(e, 2)"
           >
         </div>
         <div text-left>
           <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">One's complement</label>
           <input
             id="input"
-            v-model="name"
+            :value="onesComplement"
             placeholder="Enter a number"
             type="text"
             autocomplete="false"
@@ -105,6 +171,7 @@ const { t } = useI18n()
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"
             outline="none active:none"
+            @input="onesToDecimal"
           >
         </div>
         <div text-left>
@@ -119,8 +186,7 @@ const { t } = useI18n()
           </div>
           <input
             id="input"
-            v-model="name"
-            placeholder="Enter a number"
+            :value="twosComplement"
             type="text"
             autocomplete="false"
             p="x-4 y-2"
@@ -129,6 +195,7 @@ const { t } = useI18n()
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"
             outline="none active:none"
+            @input="twosToDecimal"
           >
         </div>
       </div>
@@ -137,11 +204,27 @@ const { t } = useI18n()
     <div>
       <button
         class="m-3 text-sm btn"
-        :disabled="!name"
-        @click="go"
+        @click="save"
       >
         Save
+      </button>
+      <button
+        class="m-3 text-sm btn bg-teal7 hover:bg-teal8"
+        @click="handleDrawer"
+      >
+        View History
       </button>
     </div>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 0.5s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  left: -40%;
+}
+</style>
