@@ -1,10 +1,16 @@
 <script setup lang="ts">
+import { tSInferType } from '@babel/types';
 import type { IResult } from '~/types'
 
 const { t } = useI18n()
 const decimalValue = ref(0)
 const isShow = ref(false)
 const signed = ref(true)
+
+const toggleError = (e: Event, flag: boolean) => {
+  if (flag) (e.target as Element).classList.add('bg-red-50', 'text-red-900', 'placeholder-red-700', 'dark:text-red-400')
+  else (e.target as Element).classList.remove('bg-red-50', 'text-red-900', 'placeholder-red-700', 'dark:text-red-400')
+}
 
 const hexadecimalVal = computed(() => {
   return decimalValue.value.toString(16)
@@ -17,26 +23,28 @@ const extraVal = computed(() => {
 })
 
 const updateBase = (e: any) => {
+  const prev = extraVal.value
   base.value = parseInt(e.target.value)
+  decimalValue.value = parseInt(prev, base.value)
 }
 
 const updateDecimal = (e: any, base: number) => {
   const res = e.target.value
   if (res.length === 0) {
-    e.target.classList.remove('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+    toggleError(e, false)
     return
   }
   const num = parseInt(res, base)
   if (isNaN(num) || (!signed.value && num < 0)) {
-    e.target.classList.add('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+    toggleError(e, true)
     return
   } else {
-    e.target.classList.remove('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
+    toggleError(e, false)
   }
   decimalValue.value = num
 }
 
-const toFixed = (d = '', length = 8, symbol = 0) => {
+const toFixed = (d = '', length = 32, symbol = 0) => {
   if (d.length < length)
     return symbol + '0'.repeat(length - 1 - d.length) + d
   return d
@@ -45,60 +53,70 @@ const toFixed = (d = '', length = 8, symbol = 0) => {
 const binaryVal = computed(() => {
   const two = Math.abs(decimalValue.value).toString(2)
   if (decimalValue.value >= 0)
-    return toFixed(two, 8, 0)
+    return toFixed(two, 32, 0)
   else
-    return toFixed(two, 8, 1)
+    return toFixed(two, 32, 1)
 })
 
 const onesComplement = computed(() => {
-  if (decimalValue.value >= 0) {
-    return binaryVal.value
-  } else {
-    if (signed) {
-      let data = ''
-      for (let index = 0; index < 8; index++) {
-        const item = binaryVal.value[index]
-        if (index === 0) data += item
-        else data += Math.abs(+item - 1)
-      }
-      return data
-    } else {
-      const num = ~decimalValue.value
-      return num.toString(2)
-    }
-  }
+  if (decimalValue.value >= 0 || !signed.value) return binaryVal.value
+  let res = ''
+  for (const char of binaryVal.value)
+    res += char === '0' ? '1' : '0'
+  if (signed)
+    return binaryVal.value[0] + res.slice(1)
+  else return res
 })
 
 const twosComplement = computed(() => {
-  if (decimalValue.value >= 0)
-    return binaryVal.value
+  if (decimalValue.value >= 0 || !signed.value) return binaryVal.value
   const valid = onesComplement.value.slice(1)
   const validTenComplete = parseInt(valid, 2) + 1
   const validTwoComplete = toFixed(
     validTenComplete.toString(2),
-    8,
+    32,
     1,
   )
   return validTwoComplete
 })
 
-const toggleError = (e: any, flag: boolean) => {
-  if (flag) e.target.classList.add('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
-  else e.target.classList.remove('bg-red-50', 'border-red-500', 'text-red-900', 'placeholder-red-700')
-}
-
-const onesToDecimal = (e: any) => {
-  if (e.target.value.length === 0) {
+const binaryToDecimal = (e: any) => {
+  const str = e.target.value
+  if (str.length === 0) {
     toggleError(e, false)
     return
   }
-  const res = parseInt(e.target.value)
+  let res = 0
+  if (signed.value && str[0] === '1')
+    res = -parseInt(str.slice(1), 2)
+  else
+    res = parseInt(str, 2)
   if (isNaN(res)) {
     toggleError(e, true)
     return
   } else { toggleError(e, false) }
-  const origin = ~res
-  decimalValue.value = origin
+  decimalValue.value = res
+}
+
+const onesToDecimal = (e: any) => {
+  const str = e.target.value
+  if (str.length === 0) {
+    toggleError(e, false)
+    return
+  }
+  console.log(str);
+  let res = 0
+  if (signed.value && str[0] === '1') {
+    res = -(~parseInt(str.slice(1), 2))
+
+  }
+  else
+    res = parseInt(str, 2)
+  if (isNaN(res)) {
+    toggleError(e, true)
+    return
+  } else { toggleError(e, false) }
+  decimalValue.value = res
 }
 
 const twosToDecimal = (e: any) => {
@@ -109,8 +127,8 @@ const twosToDecimal = (e: any) => {
 }
 
 const results = reactive<IResult[]>([])
-
 const success = ref(false)
+
 const save = () => {
   results.push({
     decimalValue: decimalValue.value,
@@ -146,12 +164,12 @@ const handleDrawer = () => {
   <div>
     <div i-carbon-data-reference text-4xl inline-block />
     <p>
-      <a rel="noreferrer" href="https://github.com/antfu/vitesse-lite" target="_blank">
+      <a rel="noreferrer" href="https://github.com/glintonliao/reactive-numbers-converter" target="_blank">
         {{ t('intro.desc') }}
       </a>
     </p>
     <p>
-      <em text-sm op75>All in one</em>
+      <em text-sm op75>All in one, fully reactive</em>
     </p>
 
     <div py-3 />
@@ -232,12 +250,12 @@ const handleDrawer = () => {
             placeholder="Enter a number"
             autocomplete="false"
             p="x-4 y-2"
-            w="300px"
+            w="400px"
             text="center"
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"
             outline="none active:none"
-            @input="e => updateDecimal(e, 2)"
+            @input="binaryToDecimal($event)"
           >
         </div>
         <div text-left>
@@ -249,7 +267,7 @@ const handleDrawer = () => {
             type="text"
             autocomplete="false"
             p="x-4 y-2"
-            w="300px"
+            w="400px"
             text="center"
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"
@@ -274,7 +292,7 @@ const handleDrawer = () => {
             type="text"
             autocomplete="false"
             p="x-4 y-2"
-            w="300px"
+            w="400px"
             text="center"
             bg="gray-50 dark:gray-700"
             border="~ rounded gray-200 dark:gray-700"

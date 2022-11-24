@@ -3,9 +3,9 @@
 // you can use this to manipulate the document head in any components,
 // they will be rendered correctly in the html results with vite-ssg
 useHead({
-  title: 'King of Bots',
+  title: 'Reactive Numbers converter',
   meta: [
-    { name: 'description', content: 'AI battle platform' },
+    { name: 'description', content: 'All in one with fully reactivity' },
     {
       name: 'theme-color',
       content: computed(() => isDark.value ? '#00aba9' : '#ffffff'),
