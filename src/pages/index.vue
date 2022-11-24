@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { tSInferType } from '@babel/types';
 import type { IResult } from '~/types'
 
 const { t } = useI18n()
@@ -104,14 +103,10 @@ const onesToDecimal = (e: any) => {
     toggleError(e, false)
     return
   }
-  console.log(str);
   let res = 0
-  if (signed.value && str[0] === '1') {
-    res = -(~parseInt(str.slice(1), 2))
-
-  }
-  else
-    res = parseInt(str, 2)
+  if (signed.value && str[0] === '1')
+    res = ~parseInt(str.slice(1), 2)
+  else res = parseInt(str, 2)
   if (isNaN(res)) {
     toggleError(e, true)
     return
@@ -120,10 +115,20 @@ const onesToDecimal = (e: any) => {
 }
 
 const twosToDecimal = (e: any) => {
-  const res = parseInt(e.target.value)
-  const origin = ~res + 1
-  if (!isNaN(res))
-    decimalValue.value = origin
+  const str = e.target.value
+  if (str.length === 0) {
+    toggleError(e, false)
+    return
+  }
+  let res = 0
+  if (signed.value && str[0] === '1')
+    res = ~parseInt(str.slice(1), 2) + 1
+  else res = parseInt(str, 2)
+  if (isNaN(res)) {
+    toggleError(e, true)
+    return
+  } else { toggleError(e, false) }
+  decimalValue.value = res
 }
 
 const results = reactive<IResult[]>([])
@@ -179,7 +184,7 @@ const handleDrawer = () => {
         <div text-left>
           <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Decimal</label>
           <input
-            id="inputd"
+            id="input"
             :value="decimalValue"
             placeholder="Enter a number"
             type="text"
