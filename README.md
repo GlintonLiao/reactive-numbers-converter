@@ -1,13 +1,19 @@
-<p align='center'>
-  <img src='https://user-images.githubusercontent.com/11247099/111864893-a457fd00-899e-11eb-9f05-f4b88987541d.png' alt='Vitesse - Opinionated Vite Starter Template' width='600'/>
-</p>
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/glintonliao/king-of-bots">
+    <img src="https://user-images.githubusercontent.com/37015336/197306751-03e09775-91c4-403c-ad9a-79077521f4e5.jpg" alt="Logo" width="80" height="80">
+  </a>
 
-<h6 align='center'>
-<a href="https://vitesse-lite.netlify.app/">Live Demo</a>
-</h6>
+  <h3 align="center">Reactive Numbers Converter</h3>
 
-<h5 align='center'>
-<b>Lightweight version of <a href="https://github.com/antfu/vitesse">Vitesse</a></b>
-</h5>
-
-<br>
+  <p align="center">
+    An Online tool for numbers conversion with reactivity
+    <br />
+    <a href="https://www.titongpaolu.run/">Website</a>
+    ·
+    <a href="https://github.com/glintonliao/reactive-numbers-converter/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/glintonliao/reactive-numbers-converter/issues">Request Feature</a>
+  </p>
+</div>

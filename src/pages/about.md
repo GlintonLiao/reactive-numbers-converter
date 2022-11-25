@@ -3,90 +3,26 @@ title: About
 ---
 
 <div class="text-center">
-  <!-- You can use Vue components inside markdown -->
   <div i-carbon-dicom-overlay class="text-4xl -mb-6 m-auto" />
   <h3>About this Project</h3>
 </div>
 
-[King of Bots](https://github.com/glintonliao/king-of-bots) is an AI battle platform supporting PvP and PvE features. It was made by SpringBoot, Vite. With **file-based routing**, **components auto importing**, **markdown support**, I18n, PWA and uses **UnoCSS** for styling and icons.
+[Reactive Numbers Convertor](https://github.com/glintonliao/reactive-numbers-converter) is an online tool for numbers conversion. It allows users to enter in any input box and synchronizes conversion results without clicking any button.
 
-```ts
-// project init
-onMounted(() => {
-  pk.opponentUsername = 'My Opponent'
-  pk.opponentPhoto = '/anonymous.png'
+## Problem Space
 
-  pk.loser = 'none'
-  re.isRecording = false
+There are many online converters already, but none of them supports reactive conversion. Users can either enter in only one input box, or can enter at many input boxes, but need to click a "Confirm" or "Convert" button to get the result. Also, most of them support only one single feature, such as binary conversion, or binary to hexadecimal conversion, or only signed two's complements.
 
-  const socket = new WebSocket(socketUrl)
-  socket.onopen = () => {
-    pk.socket = socket
-  }
+<h4 text-center>
+How might we make a tool to convert everything all in once?
+</h4>
 
-  socket.onmessage = (msg) => {
-    const data = JSON.parse(msg.data)
-    if (data.event === 'start-matching') {
-      pk.opponentUsername = data.opponent_username
-      pk.opponentPhoto = data.opponent_photo
-      setTimeout(() => {
-        pk.status = 'playing'
-      }, 200)
-      pk.updateGame(data.game)
-    }
-    else if (data.event === 'move') {
-      const game = pk.gameObj
-      const [snake0, snake1] = game.snakes
-      snake0.setDirection(data.a_direction)
-      snake1.setDirection(data.b_direction)
-    }
-    else if (data.event === 'result') {
-      const game = pk.gameObj
-      const [snake0, snake1] = game.snakes
+## Introducing the Reactive Numbers Converter
 
-      if (data.loser === 'all' || data.loser === 'A')
-        snake0.status = 'die'
+In order to realize the real time conversion, we need to form a data model.
 
-      if (data.loser === 'all' || data.loser === 'B')
-        snake1.status = 'die'
 
-      pk.loser = data.loser
-    }
-  }
-})
-```
 
-## Bot Running Micro Service
-
-```java
-@Override
-public void run() {
-    UUID uuid = UUID.randomUUID();
-    String uid = uuid.toString().substring(0, 8);
-
-    Supplier<Integer> botInterface = Reflect.compile(
-            "com.kob.botrunningsystem.utils.Bot" + uid,
-            addUid(bot.getBotCode(), uid)
-    ).create().get();
-
-    // read code from file
-    File file = new File("input.txt");
-    try (PrintWriter fout = new PrintWriter(file)) {
-        fout.println(bot.getInput());
-        fout.flush();
-    } catch (FileNotFoundException e) {
-        e.printStackTrace();
-    }
-
-    Integer direction = botInterface.get();
-    System.out.println("move-direction: " + bot.getUserId() + " " + direction);
-
-    MultiValueMap<String, String> data = new LinkedMultiValueMap<>();
-    data.add("user_id", bot.getUserId().toString());
-    data.add("direction", direction.toString());
-
-    restTemplate.postForObject(receiveBotMoveUrl, data, String.class);
-}
-```
+### Deep in Reactivity
 
 Hope you Enjoy this project!
