@@ -21,8 +21,47 @@ How might we make a tool to convert everything all in once?
 
 In order to realize the real time conversion, we need to form a data model.
 
+### Computed Value
+
+In Vue.js, there is a reactive callback function called **Computed()**. It can compute value by passing in some reactive dependencies values.
+
+```ts
+const a = ref(1)
+const b = computed(() => {
+  return a.value * 2
+})
+
+console.log(b.value) // 2
+a.value = 2
+console.log(b.value) // 4
+```
+
+When the dependencies value changed, the computed value will be automatically updated.
+
+It is worth noting that the function will use cached value first when the value didn't change, so it's beneficial for the performance when updating pages.
+
+### Publish-Subscribe Model
+
+After having some way to sync different values, we can form a "Publish-Subscribe" data model.
+
+The key of the model is a "base" value. every other values will depend on this value, which is "subscribe" process. When the base value changes(publish), those value will be noticed to update.
+
+This img shows how data flows:
 
 
-### Deep in Reactivity
+
+Therefore, we can convert every values in real time.
+
+### Reactivity in Depth
+
+Before Vue 3, the reactivity was achieved by **Object.defineProperty()**. Vue 3 is using a new, more effected way, which is the **Proxy**.
+
+```ts
+Proxy a =
+```
+
+## Layout and Input
+
+## Core Logic
 
 Hope you Enjoy this project!
