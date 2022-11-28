@@ -48,20 +48,61 @@ The key of the model is a "base" value. every other values will depend on this v
 
 This img shows how data flows:
 
-
+![data model]()
 
 Therefore, we can convert every values in real time.
 
 ### Reactivity in Depth
 
-Before Vue 3, the reactivity was achieved by **Object.defineProperty()**. Vue 3 is using a new, more effected way, which is the **Proxy**.
+Before Vue 3, the reactivity was achieved by **Object.defineProperty()**. Vue 3 is using a new, more effected way, which is the **Proxy** object.
 
 ```ts
-Proxy a =
+function reactive(obj) {
+  return new Proxy(obj, {
+    get(target, key) {
+      track(target, key)
+      return target[key]
+    },
+    set(target, key, value) {
+      target[key] = value
+      trigger(target, key)
+    }
+  })
+}
 ```
+
+Instead of getting or setting the data directly, we use the "getter()" and "setter()". Therefore, when getting access to some data, we can track it and make some additional operations, such as triggering layout update and data synchronization.
 
 ## Layout and Input
 
+I set the inputs components in two columns using flex-box layout, one for base conversion, and the other for complements conversion.
+
+In terms of the input, Vue has a convenient input mutual binding attribute called **v-model**, but in this project, because we need to sync multiple values, we need to separate the value and on change function. Every input element has a **:value** bind with a ref in script, and an **@input** function to trigger the update process.
+
+Plus, the project supports multiple languages and dark mode. You can click the icon in footer to toggle.
+
 ## Core Logic
+
+### Convert numbers into different base
+
+### Convert numbers into ones' complement and two's complement
+
+## Final Takeaways
+
+The project is simple to build, but still contains much content and tech stacks in terms of the front-end engineering.
+
+### Project Tech Stacks
+
++ TypeScript
++ Vue
+  + Composition API(script setup)
++ UnoCSS
++ pnpm
++ Netlify
++ Vite
+  + i18n
+  + Auto-import
+
+Aside from these, I've learned how to build an app with "Publish-Subscribe" model, which is beneficial for the future as a software engineer.
 
 Hope you Enjoy this project!
