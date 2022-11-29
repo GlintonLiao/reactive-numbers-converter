@@ -46,9 +46,9 @@ After having some way to sync different values, we can form a "Publish-Subscribe
 
 The key of the model is a "base" value. every other values will depend on this value, which is "subscribe" process. When the base value changes(publish), those value will be noticed to update.
 
-This img shows how data flows:
+This image shows how data flows:
 
-![data model]()
+![data model](/data%20model.jpg)
 
 Therefore, we can convert every values in real time.
 
@@ -79,13 +79,49 @@ I set the inputs components in two columns using flex-box layout, one for base c
 
 In terms of the input, Vue has a convenient input mutual binding attribute called **v-model**, but in this project, because we need to sync multiple values, we need to separate the value and on change function. Every input element has a **:value** bind with a ref in script, and an **@input** function to trigger the update process.
 
-Plus, the project supports multiple languages and dark mode. You can click the icon in footer to toggle.
+Plus, the project supports multiple languages and dark mode. You can click the icon at the footer to toggle.
 
 ## Core Logic
 
-### Convert numbers into different base
+### Convert numbers into different radix
+
+We can use one of the built-in function in JavaScript, **toString()**, this function takes a number, and an option parameter for radix.
+
+Each time we modify the value in input bar, we can convert it into decimal, and update the decimal value, then vue will automatically update every other corresponding values according to the computed methods.
+
+```ts
+// need to set some error handling logic
+const updateDecimal = (e: any, base: number) => {
+  const res = e.target.value
+  if (res.length === 0) {
+    toggleError(e, false)
+    return
+  }
+  const num = parseInt(res, base)
+  if (isNaN(num) || (!signed.value && num < 0)) {
+    toggleError(e, true)
+    return
+  } else {
+    toggleError(e, false)
+  }
+  decimalValue.value = num
+}
+```
 
 ### Convert numbers into ones' complement and two's complement
+
+First, we need to determined the number of bits for the binary value. In this project, I chose 32-bits, because 32 bits is the number of bits used for integer types in some strongly typed languages.
+
+Then we should come up a way to fix the length of the number.
+
+```ts
+// if the number is less than 32 bits, we append 0 to make it 32 bits
+const toFixed = (d = '', length = 32, symbol = 0) => {
+  if (d.length < length)
+    return symbol + '0'.repeat(length - 1 - d.length) + d
+  return d
+}
+```
 
 ## Final Takeaways
 
