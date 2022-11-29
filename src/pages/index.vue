@@ -151,6 +151,7 @@ const save = () => {
 }
 
 const clear = () => {
+  decimalValue.value = 1
   decimalValue.value = 0
 }
 
