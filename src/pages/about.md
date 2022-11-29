@@ -48,7 +48,7 @@ The key of the model is a "base" value. every other values will depend on this v
 
 This image shows how data flows:
 
-![data model](../../public/data%20model.jpg)
+![data model](https://user-images.githubusercontent.com/37015336/204418332-79f93845-45c5-4cce-b29d-3b738409ff9b.jpg)
 
 Therefore, we can convert every values in real time.
 
