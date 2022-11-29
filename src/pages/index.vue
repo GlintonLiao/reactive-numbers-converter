@@ -170,11 +170,11 @@ const handleDrawer = () => {
     <div i-carbon-data-reference text-4xl inline-block />
     <p>
       <a rel="noreferrer" href="https://github.com/glintonliao/reactive-numbers-converter" target="_blank">
-        {{ t('intro.desc') }}
+        {{ t('intro.title') }}
       </a>
     </p>
     <p>
-      <em text-sm op75>All in one, fully reactive</em>
+      <em text-sm op75>{{ t('intro.desc') }}</em>
     </p>
 
     <div py-3 />
@@ -182,7 +182,7 @@ const handleDrawer = () => {
     <div flex justify-center space-x-15 mb-10>
       <div flex flex-col items-center space-y-3>
         <div text-left>
-          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Decimal</label>
+          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('input.decimal') }}</label>
           <input
             id="input"
             :value="decimalValue"
@@ -199,7 +199,7 @@ const handleDrawer = () => {
           >
         </div>
         <div text-left>
-          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Hexadecimal</label>
+          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('input.hexadecimal') }}</label>
           <input
             id="input"
             :value="hexadecimalVal"
@@ -217,7 +217,7 @@ const handleDrawer = () => {
         </div>
         <div text-left>
           <div flex justify-between items-start>
-            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Self-defined</label>
+            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('input.self-defined') }}</label>
             <select
               id="base" class="bg-gray-50 text-gray-900 text-xs rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-15 h-5 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               @change="updateBase"
@@ -247,7 +247,7 @@ const handleDrawer = () => {
       </div>
       <div flex flex-col items-center space-y-3>
         <div text-left>
-          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Binary</label>
+          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('input.binary') }}</label>
           <input
             id="input"
             :value="binaryVal"
@@ -264,7 +264,7 @@ const handleDrawer = () => {
           >
         </div>
         <div text-left>
-          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">One's complement</label>
+          <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ t('input.ones-complement') }}</label>
           <input
             id="input"
             :value="onesComplement"
@@ -282,13 +282,13 @@ const handleDrawer = () => {
         </div>
         <div text-left>
           <div flex justify-between>
-            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white flex-grow-2">Two's complement</label>
+            <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white flex-grow-2">{{ t('input.twos-complement') }}</label>
             <label for="AcceptConditions" class="relative h-5 w-10 cursor-pointer">
               <input id="AcceptConditions" v-model="signed" type="checkbox" class="peer sr-only">
-              <span class="absolute inset-0 rounded-full bg-gray-300 transition peer-checked:bg-blue-500" />
+              <span class="absolute inset-0 rounded-full bg-gray-300 dark:bg-gray-700 transition peer-checked:bg-blue-500" />
               <span class="absolute inset-0 m-1 h-3 w-3 rounded-full bg-white transition peer-checked:translate-x-5" />
             </label>
-            <span text-sm ml-2>signed</span>
+            <span text-sm ml-2>{{ t('input.signed') }}</span>
           </div>
           <input
             id="input"
@@ -313,19 +313,19 @@ const handleDrawer = () => {
         class="m-3 text-sm btn"
         @click="save"
       >
-        Save
+        {{ t('button.save') }}
       </button>
       <button
         class="m-3 text-sm btn bg-teal7 hover:bg-teal8"
         @click="handleDrawer"
       >
-        View History
+        {{ t('button.view-history') }}
       </button>
       <button
         class="m-3 text-sm btn bg-orange7 hover:bg-orange8"
         @click="clear"
       >
-        Clear
+        {{ t('button.clear') }}
       </button>
     </div>
   </div>

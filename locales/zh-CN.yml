@@ -1,24 +1,16 @@
 button:
-  about: 关于
-  back: 返回
-  go: 开始游戏
-  home: 首页
-  toggle_dark: 切换深色模式
-  toggle_langs: 切换语言
-header:
-  rankings: 排名
-  game-record: 对局记录
-  battle: 对战
+  save: 保存
+  view-history: 查看历史
+  clear: 清空
+input:
+  decimal: 十进制
+  hexadecimal: 十六进制
+  self-defined: 自定义进制
+  binary: 二进制原码
+  ones-complement: 反码
+  twos-complement: 补码
+  signed: 有符号
 intro:
-  aka: 也叫
-  desc: Ai 对战平台
-  dynamic-route: 动态路由演示
-  hi: 你好，{name}
-  whats-your-name: 输入你的名字
-login:
-  login-button: 登录
-  password-holder: 请输入密码
-  register-button: 注册
-  title: 用户登录
-  username-holder: 请输入用户名
+  title: 响应式数字转换器
+  desc: 多功能合一，自动更新
 not-found: 未找到页面

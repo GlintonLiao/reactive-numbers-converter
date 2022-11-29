@@ -1,0 +1,16 @@
+button:
+  save: Sparen
+  view-history: Geschichte ansehen
+  clear: Übersichtlich
+input:
+  decimal: Dezimal
+  hexadecimal: Hexadezimal
+  self-defined: Selbstdefiniert
+  binary: Binär
+  ones-complement: Einser-Komplement
+  twos-complement: Zweierkomplement
+  signed: Unterzeichnet
+intro:
+  title: Reactive Numbers Konverter
+  desc: Alles in einem, vollständig reaktiv
+not-found: Seite nicht gefunden

@@ -1,0 +1,16 @@
+button:
+  save: 保存
+  view-history: 履歴を見る
+  clear: エンプティ
+input:
+  decimal: 十進数
+  hexadecimal: 十六進数
+  self-defined: カスタムバイナリ
+  binary: 二進数
+  ones-complement: 逆符号
+  twos-complement: 補完コード
+  signed: シンボルマーク
+intro:
+  title: 反応数変換器
+  desc: オールインワン、完全反応型
+not-found: ページが見つかりません
