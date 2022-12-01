@@ -14,7 +14,7 @@ title: About
 There are many online converters already, but none of them supports reactive conversion. Users can either enter in only one input box, or can enter at many input boxes, but need to click a "Confirm" or "Convert" button to get the result. Also, most of them support only one single feature, such as binary conversion, or binary to hexadecimal conversion, or only signed two's complements.
 
 <h4 text-center>
-How might we make a tool to convert everything all in once?
+How might we make a tool to convert everything all at once?
 </h4>
 
 ## Introducing the Reactive Numbers Converter
