@@ -1,8 +1,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/glintonliao/king-of-bots">
-    <img src="https://user-images.githubusercontent.com/37015336/197306751-03e09775-91c4-403c-ad9a-79077521f4e5.jpg" alt="Logo" width="80" height="80">
+  <a href="https://github.com/glintonliao/reactive-numbers-converter">
+    <img src="https://user-images.githubusercontent.com/37015336/206877171-0d9a7e1f-6f37-4f2a-a9a3-7927f8616585.jpg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Reactive Numbers Converter</h3>
@@ -10,7 +10,7 @@
   <p align="center">
     An Online tool for numbers conversion with reactivity
     <br />
-    <a href="https://www.titongpaolu.run/">Website</a>
+    <a href="https://reactive-numbers-converter.netlify.app/">Website</a>
     ·
     <a href="https://github.com/glintonliao/reactive-numbers-converter/issues">Report Bug</a>
     ·
@@ -59,7 +59,7 @@ The key of the model is a "base" value. every other values will depend on this v
 
 This image shows how data flows:
 
-![data model](/data%20model.jpg)
+![data model](./public/data%20model.jpg)
 
 Therefore, we can convert every values in real time.
 
