@@ -2,7 +2,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/glintonliao/reactive-numbers-converter">
-    <img src="https://user-images.githubusercontent.com/37015336/206877171-0d9a7e1f-6f37-4f2a-a9a3-7927f8616585.jpg" alt="Logo" width="80" height="80">
+    <img src="./public/favicon.svg" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Reactive Numbers Converter</h3>
@@ -149,6 +149,7 @@ The project is simple to build, but still contains much content and tech stacks 
 + Vite
   + i18n
   + Auto-import
+  + markdown
 
 Aside from these, I've learned how to build an app with "Publish-Subscribe" model, which is beneficial for the future as a software engineer.
 
